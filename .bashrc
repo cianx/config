@@ -152,7 +152,17 @@ if has_command fortune; then
 fi
 
 if has_command keychain; then
-	eval `keychain --eval --agents ssh ~/.ssh/id_rsa ~/.ssh/id_rsa.sterling`
+	KEYS=""
+	if [ -f ~/.ssh/id_rsa ]; then
+		KEYS="$KEYS ~/.ssh/id_rsa"
+	fi
+	if [ -f ~/.ssh/id_rsa_sterling ]; then
+		KEYS="$KEYS ~/.ssh/id_rsa_sterling"
+	fi
+	if [ -f ~/.ssh/id_rsa ]; then
+		KEYS="$KEYS ~/.ssh/id_ed25519"
+	fi
+	eval `keychain --eval --agents ssh $KEYS`
 fi
 export TURBO_OPTS="--concurrency=4"
 export JEST_OPTS="--maxWorkers=2 --no-coverage"
